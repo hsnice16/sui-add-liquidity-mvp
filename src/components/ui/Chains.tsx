@@ -6,13 +6,13 @@ export default function Chains() {
       <span className="relative flex shrink-0 overflow-hidden rounded-full size-4">
         <Image
           className="aspect-square h-full w-full object-contain"
-          src="/sui.svg"
+          src="/sui-circle-logo.webp"
           alt="sui-logo"
           width={16}
           height={16}
         />
       </span>
-      <span className="mx-0.5 text-base font-medium xs:block">Sui</span>
+      <span className="mx-0.5 text-base font-medium">Sui</span>
     </div>
   );
 }

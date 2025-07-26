@@ -6,12 +6,11 @@ import Chains from "./ui/Chains";
 
 export default function Navbar() {
   return (
-    <nav className="h-[var(--header-height)] px-4 sticky top-0 z-[14] md:px-10 flex justify-between items-center text-center pt-0">
-      <div className="absolute inset-0 pointer-events-none -z-[1] bg-background/90 backdrop-blur-md group-[&amp;:has(.mobile-nav)]/body:opacity-0 group-[&amp;:has(.mobile-nav)]/body:transition-opacity group-[&amp;:has(.mobile-nav)]/body:delay-200"></div>
+    <nav className="max-w-[1880px] mx-auto h-[var(--header-height)] px-4 sticky top-0 z-[14] flex justify-between items-center text-center pt-0">
       <div className="flex items-center gap-x-10">
         <a
           href="#"
-          className="shrink-0 flex gap-2 items-center text-primary text-lg text-bold"
+          className="shrink-0 flex gap-2 items-center text-primary text-lg font-bold"
         >
           <Image
             alt="Brand Logo"
