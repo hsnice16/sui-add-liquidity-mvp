@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="mx-auto px-5 md:px-10 py-6 md:py-8 w-full border-t border-neutral-900 flex justify-center sm:justify-between items-center sm:flex-row flex-col gap-x-6 gap-y-4"
+      className="max-w-[1880px] mx-auto px-5 py-6 w-full border-t border-neutral-900 flex justify-between items-center gap-x-6 gap-y-4"
     >
       <div className="text-secondary-foreground leading-6 text-base flex gap-1">
         <p>Sui Add Liquidity MVP</p>
@@ -10,7 +10,7 @@ export default function Footer() {
         <p>Copyright 2025</p>
       </div>
 
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between">
+      <div className="flex flex-col-reverse items-center justify-between">
         <div className="flex items-center space-x-6">
           <a
             className="text-secondary-foreground hover:text-white transition-colors"
