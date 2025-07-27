@@ -9,7 +9,7 @@ export default function PoolPairAndChains() {
       >
         <div className="flex">
           <Image
-            alt="WETH"
+            alt="SUI"
             loading="lazy"
             width="60"
             height="60"
@@ -20,7 +20,7 @@ export default function PoolPairAndChains() {
             style={{ color: "transparent" }}
           />
           <Image
-            alt="tETH"
+            alt="USDC"
             loading="lazy"
             width="60"
             height="60"

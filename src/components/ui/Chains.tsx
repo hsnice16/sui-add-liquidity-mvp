@@ -12,6 +12,7 @@ export default function Chains() {
           height={16}
         />
       </span>
+
       <span className="mx-0.5 text-base font-medium">Sui</span>
     </div>
   );

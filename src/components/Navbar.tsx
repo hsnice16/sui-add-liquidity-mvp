@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
-import ConnectButton from "./ui/ConnectButton";
 import Chains from "./ui/Chains";
+import ConnectButton from "./ui/ConnectButton";
 
 export default function Navbar() {
   return (
