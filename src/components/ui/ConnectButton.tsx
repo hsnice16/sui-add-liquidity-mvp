@@ -1,11 +1,11 @@
+import { shortEllipsisStr } from "@/utils/strings";
 import {
   ConnectModal,
   useCurrentAccount,
   useDisconnectWallet,
 } from "@mysten/dapp-kit";
-import { shortEllipsisStr } from "@/utils/strings";
 
-import FourDots from "./FourDots";
+import Button from "./Button";
 
 export default function ConnectButton() {
   const currentAccount = useCurrentAccount();
@@ -28,18 +28,14 @@ export default function ConnectButton() {
   ) : (
     <ConnectModal
       trigger={
-        <button className="cursor-pointer items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-neutral-950 shadow hover:bg-primary/90 h-10 py-2 rounded-full text-base px-4 flex justify-between">
-          <FourDots left />
-
+        <Button>
           <span className="text-center min-w-fit">
             <span className="flex items-center gap-x-1">
               <span>Connect</span>
               <span className="block">Wallet</span>
             </span>
           </span>
-
-          <FourDots right />
-        </button>
+        </Button>
       }
     />
   );

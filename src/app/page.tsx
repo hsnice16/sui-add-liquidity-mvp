@@ -2,6 +2,11 @@
 
 import Image from "next/image";
 
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Main from "@/components/Main";
+import { darkTheme } from "@/data/themes";
+
 import {
   createNetworkConfig,
   SuiClientProvider,
@@ -11,13 +16,8 @@ import {
 import { getFullnodeUrl } from "@mysten/sui/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import { darkTheme } from "@/data/themes";
-import Main from "@/components/Main";
-
 const { networkConfig } = createNetworkConfig({
-  localnet: { url: getFullnodeUrl("localnet") },
+  testnet: { url: getFullnodeUrl("testnet") },
 });
 
 const queryClient = new QueryClient();
@@ -25,7 +25,7 @@ const queryClient = new QueryClient();
 export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networkConfig} defaultNetwork="localnet">
+      <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
         <WalletProvider theme={darkTheme}>
           <Navbar />
 
