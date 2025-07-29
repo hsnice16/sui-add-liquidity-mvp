@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 
   --border: 96 5% 22%;
   --border-divider-blank: 227 18% 9%;
@@ -16,6 +16,14 @@
   --neutral-200: 77 6% 78%;
   --neutral-950: 90 6% 8%;
   --neutral-1000: 90 6% 4%;
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @theme inline {
@@ -37,15 +45,34 @@
   --color-neutral-1000: hsl(var(--neutral-1000));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+/* override */
+.p-toast-message-content {
+  padding: 10px !important;
+}
+
+.p-toast-message-content > svg {
+  width: 16px !important;
+}
+
+.p-toast-message-content > .p-toast-message-text {
+  margin-left: 12px !important;
+}
+
+.p-toast-message-content > .p-toast-message-text > .p-toast-detail {
+  margin-top: 0 !important;
+}
+
+.p-toast-message-content > div:last-child > button {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.p-toast-message-content > div:last-child > button > svg {
+  width: 14px !important;
 }

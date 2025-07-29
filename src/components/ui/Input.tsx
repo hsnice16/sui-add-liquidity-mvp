@@ -22,6 +22,7 @@ export default function Input({
     <div className="bg-neutral-900 px-4 py-3 rounded-2xl flex flex-col gap-2">
       <div className="flex gap-2">
         <input
+          pattern="^\d*\.?\d*$"
           type="number"
           className={clsx("flex-1 outline-none text-[1.5rem]", {
             "text-red-400": isError,
