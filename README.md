@@ -50,3 +50,4 @@ Things that can make it even better.
 
 - Mobile Responsiveness.
 - Options to select different pools.
+- Show token price.
