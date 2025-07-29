@@ -1,18 +1,16 @@
 import Image from "next/image";
 
-import { PoolConfig } from "@skate-org/skate_amm_sui_sdk";
+import { getPoolConfig } from "@/utils/pool";
 
 import Button from "./Button";
 
 type SelectTokenPairProps = {
-  poolConfig: PoolConfig;
   handleContinueClick: () => void;
 };
 
-export function SelectTokenPair({
-  poolConfig,
-  handleContinueClick,
-}: SelectTokenPairProps) {
+export function SelectTokenPair({ handleContinueClick }: SelectTokenPairProps) {
+  const poolConfig = getPoolConfig();
+
   return (
     <div className="border border-neutral-800 p-6 rounded-2xl flex-1 flex flex-col gap-8">
       <div className="flex flex-col">

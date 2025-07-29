@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
+import { getPoolConfig, getPoolTokensBalance } from "@/utils/pool";
 
 import Button from "./Button";
 import Input from "./Input";
@@ -12,6 +13,7 @@ export function DepositTokens() {
     owner: currentAccount?.address ?? "",
   });
 
+  const poolConfig = useMemo(() => getPoolConfig(), []);
   const { suiBalance, usdcBalance } = useMemo(() => {
     if (data?.length) {
       const suiToken = data.filter((token) =>
@@ -31,6 +33,25 @@ export function DepositTokens() {
   const [usdcValue, setUsdcValue] = useState("");
   const [errorText, setErrorText] = useState("");
 
+  const [suiEqUSDC, setSuiEqUSDC] = useState("");
+  const [usdcEqSui, setUsdcEqSui] = useState("");
+
+  useEffect(() => {
+    (async function () {
+      const poolTokensBalance = await getPoolTokensBalance();
+
+      const suiEqUSDC =
+        Number(poolTokensBalance.token1_balance) /
+        Number(poolTokensBalance.token0_balance);
+      setSuiEqUSDC(suiEqUSDC.toFixed(poolConfig.token1Decimals));
+
+      const usdcEqSui =
+        Number(poolTokensBalance.token0_balance) /
+        Number(poolTokensBalance.token1_balance);
+      setUsdcEqSui(usdcEqSui.toFixed(poolConfig.token0Decimals));
+    })();
+  }, [poolConfig]);
+
   const buttonText = useMemo(() => {
     if (!currentAccount) {
       return "Connect Wallet";
@@ -40,8 +61,12 @@ export function DepositTokens() {
       return errorText;
     }
 
+    if (suiValue && usdcValue) {
+      return "Deposit";
+    }
+
     return "Enter an amount";
-  }, [currentAccount, errorText]);
+  }, [currentAccount, errorText, suiValue, usdcValue]);
 
   const handleChange = (changeForToken: string, value: string) => {
     setErrorText("");
@@ -53,13 +78,26 @@ export function DepositTokens() {
     switch (changeForToken) {
       case "SUI": {
         setSuiValue(value);
-        setUsdcValue(value);
+        setUsdcValue(
+          String(
+            // Converting back to number to truncate trailing zeroes
+            +(Number(suiEqUSDC) * Number(value)).toFixed(
+              poolConfig.token1Decimals
+            )
+          )
+        );
 
         break;
       }
       case "USDC": {
         setUsdcValue(value);
-        setSuiValue(value);
+        setSuiValue(
+          String(
+            +(Number(usdcEqSui) * Number(value)).toFixed(
+              poolConfig.token0Decimals
+            )
+          )
+        );
 
         break;
       }
@@ -97,6 +135,11 @@ export function DepositTokens() {
           </div>
           <span className="text-[1.5rem]">SUI / USDC</span>
         </div>
+
+        <p className="text-sm mt-1 pl-1">
+          <span className="text-neutral-400">Market price: </span>
+          <span className="font-semibold">{suiEqUSDC} USDC = 1 SUI (-)</span>
+        </p>
       </div>
 
       <div className="w-full border border-neutral-800 p-6 rounded-2xl flex flex-col gap-6">
