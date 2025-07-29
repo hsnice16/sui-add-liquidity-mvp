@@ -1,18 +1,18 @@
-import { PoolConfig } from "@skate-org/skate_amm_sui_sdk";
+import { getPoolConfig } from "@/utils/pool";
 
 import AddressWithCopy from "./ui/AddressWithCopy";
 import Button from "./ui/Button";
 import PoolPairAndChains from "./ui/PoolPairAndChains";
 
 type PoolDetailsProps = {
-  poolConfig: PoolConfig;
   handleAddLiquidityClick: () => void;
 };
 
 export default function PoolDetails({
-  poolConfig,
   handleAddLiquidityClick,
 }: PoolDetailsProps) {
+  const poolConfig = getPoolConfig();
+
   return (
     <>
       <div>

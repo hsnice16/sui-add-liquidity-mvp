@@ -1,20 +1,14 @@
 import { useState } from "react";
 
-import { PoolConfig } from "@skate-org/skate_amm_sui_sdk";
-
 import { DepositTokens } from "./ui/DepositTokens";
 import { SelectTokenPair } from "./ui/SelectTokenPair";
 import { Steps } from "./ui/Steps";
 
 type AddLiquidityProps = {
   handleGoBackClick: () => void;
-  poolConfig: PoolConfig;
 };
 
-export default function AddLiquidity({
-  handleGoBackClick,
-  poolConfig,
-}: AddLiquidityProps) {
+export default function AddLiquidity({ handleGoBackClick }: AddLiquidityProps) {
   const [activeStep, setActiveStep] = useState(1);
 
   return (
@@ -51,10 +45,7 @@ export default function AddLiquidity({
         <Steps activeStep={activeStep} setActiveStep={setActiveStep} />
 
         {activeStep === 1 ? (
-          <SelectTokenPair
-            poolConfig={poolConfig}
-            handleContinueClick={() => setActiveStep(2)}
-          />
+          <SelectTokenPair handleContinueClick={() => setActiveStep(2)} />
         ) : null}
 
         {activeStep === 2 ? <DepositTokens /> : null}
