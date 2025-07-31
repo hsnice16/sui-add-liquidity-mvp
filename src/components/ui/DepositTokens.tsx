@@ -1,7 +1,9 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Toast } from "primereact/toast";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
@@ -11,15 +13,11 @@ import {
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { isSuiCoin } from "@skate-org/skate_amm_sui_sdk/dist/utils/transactionHelpers";
 import { getPoolConfig, getPoolTokensBalance, mint } from "@/utils/pool";
-
 import {
   formatBigBalance,
   formatSmallBalance,
   getCoinsForTx,
 } from "@/utils/wallet";
-
-import Button from "./Button";
-import Input from "./Input";
 
 export function DepositTokens() {
   const currentAccount = useCurrentAccount();
@@ -204,29 +202,22 @@ export function DepositTokens() {
         <div className="flex items-center gap-2">
           <div className="flex">
             <Image
-              alt="SUI"
-              loading="lazy"
-              width="44"
-              height="44"
-              decoding="async"
-              data-nimg="1"
-              className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid border-[.25rem]"
+              width={40}
+              height={40}
+              alt="sui-circle-logo"
               src="/sui-circle-logo.webp"
-              style={{ color: "transparent" }}
+              className="size-10 border-4 border-background rounded-full"
             />
 
             <Image
-              alt="USDC"
-              loading="lazy"
-              width="44"
-              height="44"
-              decoding="async"
-              data-nimg="1"
-              className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid border-[.25rem] ml-[-0.75rem]"
+              width={40}
+              height={40}
+              alt="usdc-logo"
               src="/usdc-logo.png"
-              style={{ color: "transparent" }}
+              className="size-10 -ml-4 border-4 border-background rounded-full"
             />
           </div>
+
           <span className="text-[1.5rem]">SUI / USDC</span>
         </div>
 
@@ -250,28 +241,28 @@ export function DepositTokens() {
         <div className="flex flex-col gap-2">
           <Input
             token="SUI"
-            logoSrc="/sui-circle-logo.webp"
-            balance={suiBalance}
             value={suiValue}
+            balance={suiBalance}
+            alt="sui-circle-logo"
             handleChange={handleChange}
             isError={!!errorText.length}
+            logoSrc="/sui-circle-logo.webp"
           />
 
           <Input
             token="USDC"
-            logoSrc="/usdc-logo.png"
-            balance={usdcBalance}
+            alt="usdc-logo"
             value={usdcValue}
+            balance={usdcBalance}
+            logoSrc="/usdc-logo.png"
             handleChange={handleChange}
             isError={!!errorText.length}
           />
         </div>
 
-        <div>
-          <Button disabled={buttonText !== "Deposit"} className="w-full h-12">
-            <span className="text-center min-w-fit">{buttonText}</span>
-          </Button>
-        </div>
+        <Button disabled={buttonText !== "Deposit"} className="w-full h-12">
+          {buttonText}
+        </Button>
       </form>
     </div>
   );

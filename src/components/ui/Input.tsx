@@ -6,6 +6,7 @@ type InputProps = {
   logoSrc: string;
   balance: number;
   value: string;
+  alt: string;
   handleChange: (changeForToken: string, value: string) => void;
   isError?: boolean;
 };
@@ -15,6 +16,7 @@ export default function Input({
   logoSrc,
   balance,
   value,
+  alt,
   handleChange,
   isError,
 }: InputProps) {
@@ -22,27 +24,23 @@ export default function Input({
     <div className="bg-neutral-900 px-4 py-3 rounded-2xl flex flex-col gap-2">
       <div className="flex gap-2">
         <input
-          pattern="^\d*\.?\d*$"
+          value={value}
           type="number"
+          placeholder="0"
+          pattern="^\d*\.?\d*$"
+          onChange={(event) => handleChange(token, event.target.value)}
           className={clsx("flex-1 outline-none text-[1.5rem]", {
             "text-red-400": isError,
           })}
-          placeholder="0"
-          value={value}
-          onChange={(event) => handleChange(token, event.target.value)}
         />
 
-        <div className="flex text-[1.15rem] gap-1 items-center">
+        <div className="flex text-[1.15rem] gap-2 items-center">
           <Image
-            alt="SUI"
-            loading="lazy"
-            width="32"
-            height="32"
-            decoding="async"
-            data-nimg="1"
-            className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid border-[.25rem]"
+            alt={alt}
+            width={24}
+            height={24}
             src={logoSrc}
-            style={{ color: "transparent" }}
+            className="size-6"
           />
 
           <span className="font-semibold">{token}</span>

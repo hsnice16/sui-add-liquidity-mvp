@@ -2,58 +2,37 @@ import Image from "next/image";
 
 export default function PoolPairAndChains() {
   return (
-    <section className="flex gap-3 items-center mt-3 flex-wrap">
-      <div
-        role="group"
-        className="relative flex items-center w-max font-medium"
-      >
-        <div className="flex">
+    <div className="flex justify-start items-center gap-4 mt-3">
+      <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center">
           <Image
-            alt="SUI"
-            loading="lazy"
-            width="60"
-            height="60"
-            decoding="async"
-            data-nimg="1"
-            className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid size-10 border-[.25rem]"
+            width={40}
+            height={40}
+            alt="sui-circle-logo"
             src="/sui-circle-logo.webp"
-            style={{ color: "transparent" }}
+            className="size-10 border-4 border-background rounded-full"
           />
           <Image
-            alt="USDC"
-            loading="lazy"
-            width="60"
-            height="60"
-            decoding="async"
-            data-nimg="1"
-            className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid size-10 border-[.25rem] ml-[-0.75rem]"
+            width={40}
+            height={40}
+            alt="usdc-logo"
             src="/usdc-logo.png"
-            style={{ color: "transparent" }}
+            className="size-10 -ml-4 border-4 border-background rounded-full"
           />
         </div>
-        <span className="whitespace-nowrap block text-[2.5rem] leading-[3rem] ml-3">
-          SUI/USDC
-        </span>
+
+        <span className="font-medium text-[2.5rem]">SUI/USDC</span>
       </div>
 
-      <div role="group" className="relative flex items-center w-max">
-        <div className="flex">
-          <Image
-            alt="sui-logo"
-            loading="lazy"
-            width="36"
-            height="36"
-            decoding="async"
-            data-nimg="1"
-            className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid size-6 border-[.1875rem]"
-            src="/sui-circle-logo.webp"
-            style={{ color: "transparent" }}
-          />
-        </div>
-        <span className="whitespace-nowrap block text-sm ml-1.5 text-neutral-200">
-          chain
-        </span>
+      <div className="flex justify-center items-center gap-1.5">
+        <Image
+          width={20}
+          height={20}
+          alt="sui-circle-logo"
+          src="/sui-circle-logo.webp"
+        />
+        <span className="text-sm text-neutral-200">chain</span>
       </div>
-    </section>
+    </div>
   );
 }
