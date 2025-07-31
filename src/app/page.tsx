@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { PrimeReactProvider } from "primereact/api";
 
+import Main from "@/components/Main";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import Main from "@/components/Main";
 
 import { NETWORK } from "@/data/config";
 import { darkTheme } from "@/data/themes";
@@ -42,7 +42,7 @@ export default function Home() {
                   height={287}
                   alt="footer-bg"
                   src="/footer-bg.webp"
-                  className="absolute bottom-0 -z-10 mask-x-from-95% mask-x-to-100%"
+                  className="absolute bottom-0 -z-10 mask-x-from-95% mask-x-to-100% h-[287px]"
                 />
               </div>
 

@@ -1,22 +1,25 @@
-import Image from "next/image";
 import { Toast } from "primereact/toast";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import DepositTokensPair from "@/components/ui/DepositTokensPair";
+
 import {
   useCurrentAccount,
-  useSignAndExecuteTransaction,
   useSuiClientQuery,
+  useSignAndExecuteTransaction,
 } from "@mysten/dapp-kit";
 
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import { isSuiCoin } from "@skate-org/skate_amm_sui_sdk/dist/utils/transactionHelpers";
 import { getPoolConfig, getPoolTokensBalance, mint } from "@/utils/pool";
+import { isSuiCoin } from "@skate-org/skate_amm_sui_sdk/dist/utils/transactionHelpers";
+
 import {
+  getCoinsForTx,
   formatBigBalance,
   formatSmallBalance,
-  getCoinsForTx,
 } from "@/utils/wallet";
 
 export function DepositTokens() {
@@ -199,28 +202,7 @@ export function DepositTokens() {
     <div className="flex-1 flex flex-col gap-6">
       <Toast ref={toast} position="bottom-right" />
       <div className="w-full border border-neutral-800 p-6 rounded-2xl">
-        <div className="flex items-center gap-2">
-          <div className="flex">
-            <Image
-              width={40}
-              height={40}
-              alt="sui-circle-logo"
-              src="/sui-circle-logo.webp"
-              className="size-10 border-4 border-background rounded-full"
-            />
-
-            <Image
-              width={40}
-              height={40}
-              alt="usdc-logo"
-              src="/usdc-logo.png"
-              className="size-10 -ml-4 border-4 border-background rounded-full"
-            />
-          </div>
-
-          <span className="text-[1.5rem]">SUI / USDC</span>
-        </div>
-
+        <DepositTokensPair />
         <p className="text-sm mt-1 pl-1">
           <span className="text-neutral-400">Market price: </span>
           <span className="font-semibold">{suiEqUSDC} USDC = 1 SUI (-)</span>

@@ -48,6 +48,5 @@ _check http://localhost:3000_
 
 Things that can make it even better.
 
-- Mobile Responsiveness.
 - Options to select different pools.
 - Show token price.

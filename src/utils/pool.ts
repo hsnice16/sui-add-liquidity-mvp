@@ -1,6 +1,6 @@
+import SkateAmmSdk from "@skate-org/skate_amm_sui_sdk";
 import { NETWORK, POOL_TYPE, SKATE_SDK_ENV } from "@/data/config";
 import { CoinStruct, getFullnodeUrl, SuiClient } from "@mysten/sui/client";
-import SkateAmmSdk from "@skate-org/skate_amm_sui_sdk";
 
 export function getPoolConfig() {
   const sdk = new SkateAmmSdk(SKATE_SDK_ENV);
@@ -10,10 +10,10 @@ export function getPoolConfig() {
 }
 
 export async function getPoolTokensBalance() {
-  const rpcUrl = getFullnodeUrl(NETWORK);
-  const client = new SuiClient({ url: rpcUrl });
-  const sdk = new SkateAmmSdk(SKATE_SDK_ENV);
   const poolType = POOL_TYPE;
+  const rpcUrl = getFullnodeUrl(NETWORK);
+  const sdk = new SkateAmmSdk(SKATE_SDK_ENV);
+  const client = new SuiClient({ url: rpcUrl });
 
   const { balance0, balance1 } = await sdk.liquidity.getPoolBalances(
     client,

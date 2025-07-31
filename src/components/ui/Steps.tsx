@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 type StepsProps = {
   activeStep: number;
@@ -7,8 +8,15 @@ type StepsProps = {
 };
 
 export function Steps({ activeStep, setActiveStep }: StepsProps) {
+  const width = useWindowWidth();
+
   return (
-    <div className="border border-neutral-800 p-6 rounded-2xl min-w-[360px]">
+    <div
+      className={clsx(
+        "border border-neutral-800 p-6 rounded-2xl hidden md:block",
+        { "min-w-[360px]": width !== 768 }
+      )}
+    >
       <div
         className="cursor-pointer flex items-start gap-4 hover:opacity-90 transition-all duration-300"
         onClick={() => setActiveStep(1)}
