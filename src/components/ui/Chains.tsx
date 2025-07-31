@@ -1,6 +1,9 @@
 import Image from "next/image";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 export default function Chains() {
+  const width = useWindowWidth();
+
   return (
     <div className="flex items-center gap-1 bg-neutral-950 px-3 py-2 rounded-full">
       <Image
@@ -9,7 +12,9 @@ export default function Chains() {
         alt="sui-circle-logo"
         src="/sui-circle-logo.webp"
       />
-      <span className="mx-0.5 text-base font-medium">Sui</span>
+      {width <= 560 ? null : (
+        <span className="mx-0.5 text-base font-medium">Sui</span>
+      )}
     </div>
   );
 }

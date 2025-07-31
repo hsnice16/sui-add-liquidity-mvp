@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import "./globals.css";
 
-import "primereact/resources/themes/saga-blue/theme.css";
+import "./globals.css";
 import "@mysten/dapp-kit/dist/index.css";
+import "primereact/resources/themes/saga-blue/theme.css";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
   subsets: ["latin"],
+  variable: "--font-geist-sans",
 });
 
 export const metadata: Metadata = {

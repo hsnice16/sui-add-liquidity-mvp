@@ -1,22 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-import { CopySimpleIcon } from "@phosphor-icons/react";
 import { shortEllipsisStr } from "@/utils/strings";
+import { CopySimpleIcon } from "@phosphor-icons/react";
 
 type AddressWithCopyProps = {
   address: string;
   showShort?: boolean;
-  startCharsLen?: number;
   endCharsLen?: number;
+  startCharsLen?: number;
 };
 
 export default function AddressWithCopy({
   address,
   showShort,
-  startCharsLen,
   endCharsLen,
+  startCharsLen,
 }: AddressWithCopyProps) {
   const [isCopied, setIsCopied] = useState(false);
 
