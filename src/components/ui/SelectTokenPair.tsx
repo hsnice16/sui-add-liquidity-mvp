@@ -1,8 +1,7 @@
 import Image from "next/image";
 
+import Button from "@/components/ui/Button";
 import { getPoolConfig } from "@/utils/pool";
-
-import Button from "./Button";
 
 type SelectTokenPairProps = {
   handleContinueClick: () => void;
@@ -23,30 +22,22 @@ export function SelectTokenPair({ handleContinueClick }: SelectTokenPairProps) {
         <div className="flex gap-6 mt-4">
           <button className="flex-1 cursor-pointer bg-neutral-900 flex items-center gap-2 px-4 py-3 text-lg rounded-2xl">
             <Image
-              alt="SUI"
-              loading="lazy"
-              width={28}
-              height={28}
-              decoding="async"
-              data-nimg="1"
-              className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid border-[.25rem]"
+              width={18}
+              height={18}
+              className="size-4.5"
+              alt="sui-circle-logo"
               src="/sui-circle-logo.webp"
-              style={{ color: "transparent" }}
             />
             SUI
           </button>
 
           <button className="flex-1 cursor-pointer bg-neutral-900 flex items-center gap-2 px-4 py-3 text-lg rounded-2xl">
             <Image
-              alt="USDC"
-              loading="lazy"
-              width={28}
-              height={28}
-              decoding="async"
-              data-nimg="1"
-              className="bg-neutral-1000 rounded-full object-cover block border-border-divider-blank border-solid border-[.25rem]"
+              width={18}
+              height={18}
+              alt="usdc-logo"
+              className="size-4.5"
               src="/usdc-logo.png"
-              style={{ color: "transparent" }}
             />
             USDC
           </button>
@@ -61,11 +52,9 @@ export function SelectTokenPair({ handleContinueClick }: SelectTokenPairProps) {
         </p>
       </div>
 
-      <div>
-        <Button onClick={handleContinueClick} className="w-full h-12">
-          <span className="text-center min-w-fit">Continue</span>
-        </Button>
-      </div>
+      <Button onClick={handleContinueClick} className="w-full h-12">
+        Continue
+      </Button>
     </div>
   );
 }

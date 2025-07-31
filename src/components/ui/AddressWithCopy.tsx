@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 
-import { shortEllipsisStr } from "@/utils/strings";
 import { CopySimpleIcon } from "@phosphor-icons/react";
+import { shortEllipsisStr } from "@/utils/strings";
 
 type AddressWithCopyProps = {
   address: string;
@@ -40,7 +40,7 @@ export default function AddressWithCopy({
 
   return (
     <button
-      className="flex gap-1 items-center cursor-pointer"
+      className="flex items-center gap-1 cursor-pointer"
       onClick={handleButtonClick}
     >
       {addressToShow}

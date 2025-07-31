@@ -7,8 +7,6 @@
   --border: 96 5% 22%;
   --border-divider-blank: 227 18% 9%;
 
-  --header-height: 4.5rem;
-
   --primary: 77 100% 60%;
   --primary-1000: 81 70% 12%;
   --primary-foreground: 0 0% 9%;
@@ -30,9 +28,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
   --color-border: hsl(var(--border));
   --color-border-divider-blank: hsl(var(--border-divider-blank));
 
@@ -43,6 +38,8 @@
   --color-neutral-200: hsl(var(--neutral-200));
   --color-neutral-950: hsl(var(--neutral-950));
   --color-neutral-1000: hsl(var(--neutral-1000));
+
+  --font-sans: var(--font-geist-sans);
 }
 
 body {

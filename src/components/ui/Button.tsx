@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { ReactNode } from "react";
 
-import FourDots from "./FourDots";
+import FourDots from "@/components/ui/FourDots";
 
 type ButtonProps = {
   onClick?: () => void;
@@ -19,11 +19,11 @@ export default function Button({
   return (
     <button
       disabled={disabled}
+      onClick={onClick}
       className={clsx(
-        "cursor-pointer items-center whitespace-nowrap font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-neutral-950 shadow hover:bg-primary/90 h-10 rounded-full text-base py-2 px-4 flex justify-between flex-1 active:scale-95 transition-transform duration-300",
+        "cursor-pointer h-10 py-2 px-4 flex justify-between items-center text-neutral-950 text-base font-medium bg-primary shadow transition-transform duration-300 hover:bg-primary/90 rounded-full active:scale-95 disabled:pointer-events-none disabled:opacity-50",
         className
       )}
-      onClick={onClick}
     >
       <FourDots left />
       {children}
