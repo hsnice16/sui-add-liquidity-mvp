@@ -3,8 +3,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import useWindowWidth from "@/hooks/useWindowWidth";
-import DepositTokensPair from "@/components/ui/DepositTokensPair";
+import DepositTokensHead from "@/components/ui/DepositTokensHead";
 
 import {
   useCurrentAccount,
@@ -12,8 +11,8 @@ import {
   useSignAndExecuteTransaction,
 } from "@mysten/dapp-kit";
 
+import { getPoolConfig, mint } from "@/utils/pool";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import { getPoolConfig, getPoolTokensBalance, mint } from "@/utils/pool";
 import { isSuiCoin } from "@skate-org/skate_amm_sui_sdk/dist/utils/transactionHelpers";
 
 import {
@@ -32,31 +31,10 @@ export function DepositTokens() {
 
   const toast = useRef<Toast>(null);
   const poolConfig = useMemo(() => getPoolConfig(), []);
-  const [forceRerender, setForceRerender] = useState(false);
 
   const [suiValue, setSuiValue] = useState("");
   const [usdcValue, setUsdcValue] = useState("");
-  const [errorText, setErrorText] = useState("");
-
-  const [suiEqUSDC, setSuiEqUSDC] = useState("");
-  const [usdcEqSui, setUsdcEqSui] = useState("");
-
-  useEffect(() => {
-    (async function () {
-      const poolTokensBalance = await getPoolTokensBalance();
-
-      const suiEqUSDC =
-        Number(poolTokensBalance.token1_balance) /
-        Number(poolTokensBalance.token0_balance);
-
-      const usdcEqSui =
-        Number(poolTokensBalance.token0_balance) /
-        Number(poolTokensBalance.token1_balance);
-
-      setSuiEqUSDC(suiEqUSDC.toFixed(poolConfig.token1Decimals));
-      setUsdcEqSui(usdcEqSui.toFixed(poolConfig.token0Decimals));
-    })();
-  }, [poolConfig, forceRerender]);
+  const [error, setError] = useState<Record<string, string>>({});
 
   const { suiBalance, usdcBalance } = useMemo(() => {
     if (data?.length) {
@@ -82,18 +60,38 @@ export function DepositTokens() {
     return { suiBalance: 0, usdcBalance: 0 };
   }, [
     data,
-    poolConfig.token0Decimals,
     poolConfig.token1,
+    poolConfig.token0Decimals,
     poolConfig.token1Decimals,
   ]);
+
+  useEffect(() => {
+    if (Number(suiValue) <= suiBalance) {
+      setError((prev) => ({ ...prev, "sui-input": "" }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "sui-input": "Insufficient SUI Balance",
+      }));
+    }
+
+    if (Number(usdcValue) <= usdcBalance) {
+      setError((prev) => ({ ...prev, "usdc-input": "" }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "usdc-input": "Insufficient USDC Balance",
+      }));
+    }
+  }, [suiBalance, suiValue, usdcBalance, usdcValue]);
 
   const buttonText = useMemo(() => {
     if (!currentAccount) {
       return "Connect Wallet";
     }
 
-    if (errorText) {
-      return errorText;
+    if (error["sui-input"] || error["usdc-input"]) {
+      return error["sui-input"] || error["usdc-input"];
     }
 
     if (suiValue && usdcValue) {
@@ -101,43 +99,7 @@ export function DepositTokens() {
     }
 
     return "Enter an amount";
-  }, [currentAccount, errorText, suiValue, usdcValue]);
-
-  const handleChange = (changeForToken: string, value: string) => {
-    setErrorText("");
-
-    if (Number(value) > suiBalance || Number(value) > usdcBalance) {
-      setErrorText("Insufficient Balance");
-    }
-
-    switch (changeForToken) {
-      case "SUI": {
-        setSuiValue(value);
-        setUsdcValue(
-          String(
-            // Converting back to number to truncate trailing zeroes
-            +(Number(suiEqUSDC) * Number(value)).toFixed(
-              poolConfig.token1Decimals
-            )
-          )
-        );
-
-        break;
-      }
-      case "USDC": {
-        setUsdcValue(value);
-        setSuiValue(
-          String(
-            +(Number(usdcEqSui) * Number(value)).toFixed(
-              poolConfig.token0Decimals
-            )
-          )
-        );
-
-        break;
-      }
-    }
-  };
+  }, [currentAccount, error, suiValue, usdcValue]);
 
   const handleDeposit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -166,11 +128,11 @@ export function DepositTokens() {
         onSuccess: (result) => {
           setSuiValue("");
           setUsdcValue("");
-          setForceRerender((prev) => !prev);
 
           toast.current?.show({
-            severity: "success",
+            life: 3000,
             summary: "Success",
+            severity: "success",
             detail: (
               <div className="flex">
                 Check on explorer:
@@ -183,15 +145,14 @@ export function DepositTokens() {
                 </a>
               </div>
             ),
-            life: 3000,
           });
         },
         onError: (error) => {
           toast.current?.show({
-            severity: "error",
-            summary: "Error",
-            detail: error.message,
             life: 3000,
+            summary: "Error",
+            severity: "error",
+            detail: error.message,
           });
         },
       }
@@ -201,13 +162,7 @@ export function DepositTokens() {
   return (
     <div className="flex-1 flex flex-col gap-6">
       <Toast ref={toast} position="bottom-right" />
-      <div className="w-full border border-neutral-800 p-6 rounded-2xl">
-        <DepositTokensPair />
-        <p className="text-sm mt-1 pl-1">
-          <span className="text-neutral-400">Market price: </span>
-          <span className="font-semibold">{suiEqUSDC} USDC = 1 SUI (-)</span>
-        </p>
-      </div>
+      <DepositTokensHead />
 
       <form
         className="w-full border border-neutral-800 p-6 rounded-2xl flex flex-col gap-6"
@@ -226,9 +181,9 @@ export function DepositTokens() {
             value={suiValue}
             balance={suiBalance}
             alt="sui-circle-logo"
-            handleChange={handleChange}
-            isError={!!errorText.length}
+            isError={!!error["sui-input"]}
             logoSrc="/sui-circle-logo.webp"
+            handleChange={(value) => setSuiValue(value)}
           />
 
           <Input
@@ -237,8 +192,8 @@ export function DepositTokens() {
             value={usdcValue}
             balance={usdcBalance}
             logoSrc="/usdc-logo.png"
-            handleChange={handleChange}
-            isError={!!errorText.length}
+            isError={!!error["usdc-input"]}
+            handleChange={(value) => setUsdcValue(value)}
           />
         </div>
 

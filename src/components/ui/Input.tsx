@@ -9,7 +9,7 @@ type InputProps = {
   logoSrc: string;
   balance: number;
   isError?: boolean;
-  handleChange: (changeForToken: string, value: string) => void;
+  handleChange: (value: string) => void;
 };
 
 export default function Input({
@@ -31,7 +31,7 @@ export default function Input({
           type="number"
           placeholder="0"
           pattern="^\d*\.?\d*$"
-          onChange={(event) => handleChange(token, event.target.value)}
+          onChange={(event) => handleChange(event.target.value)}
           className={clsx("flex-1 outline-none", {
             "text-red-400": isError,
             "text-[1.5rem]": width > 445,
