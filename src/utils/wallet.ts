@@ -1,6 +1,16 @@
 import { NETWORK } from "@/data/config";
 import { CoinStruct, getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
+export function formatBigBalance(balance: number | string, decimals: number) {
+  const bigDecimals = 10 ** decimals;
+  const formattedBal = Number(balance) / bigDecimals;
+  return formattedBal;
+}
+
+export function formatSmallBalance(balance: number | string, decimals: number) {
+  return String(Number(balance) * 10 ** decimals);
+}
+
 export async function getCoinsForTx(
   user: string,
   amount: string,
@@ -43,14 +53,4 @@ export async function getCoinsForTx(
   }
 
   return coins;
-}
-
-export function formatBigBalance(balance: number | string, decimals: number) {
-  const bigDecimals = 10 ** decimals;
-  const formattedBal = Number(balance) / bigDecimals;
-  return formattedBal;
-}
-
-export function formatSmallBalance(balance: number | string, decimals: number) {
-  return String(Number(balance) * 10 ** decimals);
 }

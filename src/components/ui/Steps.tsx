@@ -12,10 +12,11 @@ export function Steps({ activeStep, setActiveStep }: StepsProps) {
 
   return (
     <div
-      className={clsx(
-        "border border-neutral-800 p-6 rounded-2xl hidden md:block",
-        { "min-w-[360px]": width !== 768 }
-      )}
+      className={clsx("border border-neutral-800 p-6 rounded-2xl", {
+        block: width > 1050,
+        hidden: width <= 1050,
+        "min-w-[360px]": width !== 768,
+      })}
     >
       <div
         className="cursor-pointer flex items-start gap-4 hover:opacity-90 transition-all duration-300"

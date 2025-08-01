@@ -3,12 +3,16 @@ import Image from "next/image";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
 type InputProps = {
-  alt: string;
+  alt?: string;
   value: string;
   token: string;
-  logoSrc: string;
-  balance: number;
+  logoSrc?: string;
+  balance?: number;
   isError?: boolean;
+  logoClassname?: string;
+  inputClassname?: string;
+  tokenClassname?: string;
+  logoTokenContainerClassname?: string;
   handleChange: (value: string) => void;
 };
 
@@ -20,11 +24,15 @@ export default function Input({
   logoSrc,
   balance,
   handleChange,
+  logoClassname,
+  inputClassname,
+  tokenClassname,
+  logoTokenContainerClassname,
 }: InputProps) {
   const width = useWindowWidth();
 
   return (
-    <div className="bg-neutral-900 px-4 py-3 rounded-2xl flex flex-col gap-2">
+    <div className="bg-neutral-900 px-4 py-3 rounded-2xl flex flex-col gap-2 flex-1">
       <div className="flex gap-2 md:gap-1 lg:gap-2">
         <input
           value={value}
@@ -32,50 +40,67 @@ export default function Input({
           placeholder="0"
           pattern="^\d*\.?\d*$"
           onChange={(event) => handleChange(event.target.value)}
-          className={clsx("flex-1 outline-none", {
-            "text-red-400": isError,
-            "text-[1.5rem]": width > 445,
-            "text-[1.15rem]": width <= 445,
-          })}
+          className={clsx(
+            "flex-1 outline-none",
+            {
+              "text-red-400": isError,
+              "text-[1.5rem]": width > 445,
+              "text-[1.15rem]": width <= 445,
+            },
+            inputClassname
+          )}
         />
 
         <div
-          className={clsx("flex items-center", {
-            "gap-1 text-base": width <= 445,
-            "gap-2 md:gap-1 lg:gap-2 text-[1.15rem] md:text-[0.8rem] lg:text-[1.15rem]":
-              width > 445,
-          })}
+          className={clsx(
+            "flex items-center",
+            {
+              "gap-1 text-base": width <= 445,
+              "gap-2 md:gap-1 lg:gap-2 lg:text-[1.15rem]": width > 445,
+            },
+            logoTokenContainerClassname
+          )}
         >
-          <Image
-            alt={alt}
-            width={24}
-            height={24}
-            src={logoSrc}
-            className={clsx({
-              "size-4": width <= 445,
-              hidden: width >= 768 && width < 790,
-              "size-6 md:size-4 lg:size-6": width > 445,
-            })}
-          />
+          {logoSrc ? (
+            <Image
+              alt={alt ?? ""}
+              width={24}
+              height={24}
+              src={logoSrc}
+              className={clsx(
+                {
+                  "size-4": width <= 445,
+                  "size-6 md:size-4 lg:size-6": width > 445,
+                },
+                logoClassname
+              )}
+            />
+          ) : null}
 
           <span
-            className={clsx("font-semibold", {
-              block: width > 390,
-              hidden: width <= 390,
-            })}
+            className={clsx(
+              "font-semibold",
+              {
+                block: width > 390,
+                hidden: width <= 390,
+              },
+              tokenClassname
+            )}
           >
             {token}
           </span>
         </div>
       </div>
 
-      <p
-        className={clsx("text-right text-neutral-400 text-sm", {
-          "text-red-400": isError,
-        })}
-      >
-        {balance} {token}
-      </p>
+      {balance ? (
+        <p
+          className={clsx("text-right text-neutral-400 text-sm", {
+            "text-red-400": isError,
+          })}
+        >
+          {balance} {token}
+        </p>
+      ) : null}
     </div>
   );
 }
