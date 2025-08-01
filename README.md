@@ -50,3 +50,7 @@ Things that can make it even better.
 
 - Options to select different pools.
 - Show token price.
+
+---
+
+![demo](/public/demo.gif)
