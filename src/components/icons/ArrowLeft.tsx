@@ -1,7 +1,11 @@
 import clsx from "clsx";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
-export default function ArrowLeft() {
+type ArrowLeftProps = {
+  className?: string;
+};
+
+export default function ArrowLeft({ className }: ArrowLeftProps) {
   const width = useWindowWidth();
 
   return (
@@ -13,7 +17,10 @@ export default function ArrowLeft() {
       stroke-linecap="round"
       stroke-linejoin="round"
       xmlns="http://www.w3.org/2000/svg"
-      className={clsx({ "h-4 w-4": width <= 370, "h-5 w-5": width > 370 })}
+      className={clsx(
+        { "h-4 w-4": width <= 370, "h-5 w-5": width > 370 },
+        className
+      )}
     >
       <path d="m15 18-6-6 6-6"></path>
     </svg>

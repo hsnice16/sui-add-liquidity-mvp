@@ -27,7 +27,11 @@ export async function mint(
   token0Amount: string,
   token1Amount: string,
   coins0: CoinStruct[],
-  coins1: CoinStruct[]
+  coins1: CoinStruct[],
+  tickLower: string,
+  tickUpper: string,
+  amountToken0Min: string,
+  amountToken1Min: string
 ) {
   const sdk = new SkateAmmSdk(SKATE_SDK_ENV);
 
@@ -37,10 +41,10 @@ export async function mint(
     coins1: [...coins1],
     amountToken0: token0Amount,
     amountToken1: token1Amount,
-    tickLower: "-887272",
-    tickUpper: "887272",
-    amountToken0Min: "0",
-    amountToken1Min: "0",
+    tickLower,
+    tickUpper,
+    amountToken0Min,
+    amountToken1Min,
     actionBoxSeed: new Date().getTime().toString(),
   });
 

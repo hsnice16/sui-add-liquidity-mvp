@@ -3,70 +3,37 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import Advance from "@/components/ui/Advance";
 import DepositTokensHead from "@/components/ui/DepositTokensHead";
 
 import {
   useCurrentAccount,
-  useSuiClientQuery,
   useSignAndExecuteTransaction,
 } from "@mysten/dapp-kit";
 
 import { getPoolConfig, mint } from "@/utils/pool";
+import { INITIAL_FORM_STATE } from "@/data/constants";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import { isSuiCoin } from "@skate-org/skate_amm_sui_sdk/dist/utils/transactionHelpers";
 
-import {
-  getCoinsForTx,
-  formatBigBalance,
-  formatSmallBalance,
-} from "@/utils/wallet";
+import { FORM_STATE } from "@/types";
+import { getCoinsForTx, formatSmallBalance } from "@/utils/wallet";
+import useTokensWalletBalance from "@/hooks/useTokensWalletBalance";
 
 export function DepositTokens() {
   const currentAccount = useCurrentAccount();
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
-  const { data } = useSuiClientQuery("getAllBalances", {
-    owner: currentAccount?.address ?? "",
-  });
-
   const toast = useRef<Toast>(null);
   const poolConfig = useMemo(() => getPoolConfig(), []);
-
-  const [suiValue, setSuiValue] = useState("");
-  const [usdcValue, setUsdcValue] = useState("");
+  const { suiBalance, usdcBalance } = useTokensWalletBalance();
   const [error, setError] = useState<Record<string, string>>({});
+  const [formState, setFormState] = useState<FORM_STATE>(INITIAL_FORM_STATE);
 
-  const { suiBalance, usdcBalance } = useMemo(() => {
-    if (data?.length) {
-      const suiToken = data.filter((token) => isSuiCoin(token.coinType))?.[0];
-
-      const usdcToken = data.filter(
-        (token) =>
-          token.coinType.toLowerCase() === poolConfig.token1.toLowerCase()
-      )?.[0];
-
-      return {
-        suiBalance: formatBigBalance(
-          suiToken?.totalBalance ?? 0,
-          poolConfig.token0Decimals
-        ),
-        usdcBalance: formatBigBalance(
-          usdcToken?.totalBalance ?? 0,
-          poolConfig.token1Decimals
-        ),
-      };
-    }
-
-    return { suiBalance: 0, usdcBalance: 0 };
-  }, [
-    data,
-    poolConfig.token1,
-    poolConfig.token0Decimals,
-    poolConfig.token1Decimals,
-  ]);
-
+  /**
+   * SUI & USDC Input Check
+   */
   useEffect(() => {
-    if (Number(suiValue) <= suiBalance) {
+    if (Number(formState.suiValue) <= suiBalance) {
       setError((prev) => ({ ...prev, "sui-input": "" }));
     } else {
       setError((prev) => ({
@@ -75,7 +42,7 @@ export function DepositTokens() {
       }));
     }
 
-    if (Number(usdcValue) <= usdcBalance) {
+    if (Number(formState.usdcValue) <= usdcBalance) {
       setError((prev) => ({ ...prev, "usdc-input": "" }));
     } else {
       setError((prev) => ({
@@ -83,28 +50,97 @@ export function DepositTokens() {
         "usdc-input": "Insufficient USDC Balance",
       }));
     }
-  }, [suiBalance, suiValue, usdcBalance, usdcValue]);
+  }, [formState.suiValue, formState.usdcValue, suiBalance, usdcBalance]);
+
+  /**
+   * Advance Input Check
+   */
+  useEffect(() => {
+    if (!formState.tickLower) {
+      setError((prev) => ({
+        ...prev,
+        "tick-lower-input": "(Adv) Enter Tick Lower Amount",
+      }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "tick-lower-input": "",
+      }));
+    }
+
+    if (!formState.tickUpper) {
+      setError((prev) => ({
+        ...prev,
+        "tick-upper-input": "(Adv) Enter Tick Upper Amount",
+      }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "tick-upper-input": "",
+      }));
+    }
+
+    if (!formState.suiMinAmount) {
+      setError((prev) => ({
+        ...prev,
+        "sui-min-amount-input": "(Adv) Enter SUI Min Amount",
+      }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "sui-min-amount-input": "",
+      }));
+    }
+
+    if (!formState.usdcMinAmount) {
+      setError((prev) => ({
+        ...prev,
+        "usdc-min-amount-input": "(Adv) Enter USDC Min Amount",
+      }));
+    } else {
+      setError((prev) => ({
+        ...prev,
+        "usdc-min-amount-input": "",
+      }));
+    }
+  }, [
+    formState.tickLower,
+    formState.tickUpper,
+    formState.suiMinAmount,
+    formState.usdcMinAmount,
+  ]);
 
   const buttonText = useMemo(() => {
     if (!currentAccount) {
       return "Connect Wallet";
     }
 
-    if (error["sui-input"] || error["usdc-input"]) {
-      return error["sui-input"] || error["usdc-input"];
+    const errorText =
+      error["sui-input"] ||
+      error["usdc-input"] ||
+      error["tick-lower-input"] ||
+      error["tick-upper-input"] ||
+      error["sui-min-amount-input"] ||
+      error["usdc-min-amount-input"];
+
+    if (errorText) {
+      return errorText;
     }
 
-    if (suiValue && usdcValue) {
+    if (Number(formState.suiValue) && Number(formState.usdcValue)) {
       return "Deposit";
     }
 
     return "Enter an amount";
-  }, [currentAccount, error, suiValue, usdcValue]);
+  }, [currentAccount, error, formState.suiValue, formState.usdcValue]);
 
   const handleDeposit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const token0Value = formatSmallBalance(suiValue, poolConfig.token0Decimals);
+    const token0Value = formatSmallBalance(
+      formState.suiValue,
+      poolConfig.token0Decimals
+    );
     const coins0 = await getCoinsForTx(
       currentAccount?.address ?? "",
       token0Value,
@@ -112,7 +148,7 @@ export function DepositTokens() {
     );
 
     const token1Value = formatSmallBalance(
-      usdcValue,
+      formState.usdcValue,
       poolConfig.token1Decimals
     );
     const coins1 = await getCoinsForTx(
@@ -121,13 +157,22 @@ export function DepositTokens() {
       poolConfig.token1
     );
 
-    const tx = await mint(token0Value, token1Value, coins0, coins1);
+    const tx = await mint(
+      token0Value,
+      token1Value,
+      coins0,
+      coins1,
+      formState.tickLower,
+      formState.tickUpper,
+      formState.suiMinAmount,
+      formState.usdcMinAmount
+    );
+
     signAndExecuteTransaction(
       { transaction: tx },
       {
         onSuccess: (result) => {
-          setSuiValue("");
-          setUsdcValue("");
+          setFormState(INITIAL_FORM_STATE);
 
           toast.current?.show({
             life: 3000,
@@ -178,25 +223,30 @@ export function DepositTokens() {
         <div className="flex flex-col gap-2">
           <Input
             token="SUI"
-            value={suiValue}
             balance={suiBalance}
             alt="sui-circle-logo"
+            value={formState.suiValue}
             isError={!!error["sui-input"]}
             logoSrc="/sui-circle-logo.webp"
-            handleChange={(value) => setSuiValue(value)}
+            handleChange={(value) =>
+              setFormState((prev) => ({ ...prev, suiValue: value }))
+            }
           />
 
           <Input
             token="USDC"
             alt="usdc-logo"
-            value={usdcValue}
             balance={usdcBalance}
             logoSrc="/usdc-logo.png"
+            value={formState.usdcValue}
             isError={!!error["usdc-input"]}
-            handleChange={(value) => setUsdcValue(value)}
+            handleChange={(value) =>
+              setFormState((prev) => ({ ...prev, usdcValue: value }))
+            }
           />
         </div>
 
+        <Advance formState={formState} setFormState={setFormState} />
         <Button disabled={buttonText !== "Deposit"} className="w-full h-12">
           {buttonText}
         </Button>
